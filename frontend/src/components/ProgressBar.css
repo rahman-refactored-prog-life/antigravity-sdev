@@ -1,0 +1,84 @@
+/* Linear Progress Bar */
+.progress-linear {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.progress-linear__track {
+  flex: 1;
+  height: 8px;
+  background-color: var(--color-background-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-linear__fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-linear--primary .progress-linear__fill {
+  background-color: var(--color-primary);
+}
+
+.progress-linear--success .progress-linear__fill {
+  background-color: var(--color-success);
+}
+
+.progress-linear--warning .progress-linear__fill {
+  background-color: var(--color-warning);
+}
+
+.progress-linear--danger .progress-linear__fill {
+  background-color: var(--color-danger);
+}
+
+.progress-linear__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Circular Progress Bar */
+.progress-circular {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-circular__track {
+  stroke: var(--color-background-secondary);
+}
+
+.progress-circular__fill {
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.progress-circular--primary .progress-circular__fill {
+  stroke: var(--color-primary);
+}
+
+.progress-circular--success .progress-circular__fill {
+  stroke: var(--color-success);
+}
+
+.progress-circular--warning .progress-circular__fill {
+  stroke: var(--color-warning);
+}
+
+.progress-circular--danger .progress-circular__fill {
+  stroke: var(--color-danger);
+}
+
+.progress-circular__label {
+  position: absolute;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}

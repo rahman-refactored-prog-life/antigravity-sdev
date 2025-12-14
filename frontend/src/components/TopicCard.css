@@ -1,0 +1,102 @@
+.topic-card {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 20px;
+  background-color: var(--color-background-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.topic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1),
+    0 0 0 1px var(--color-primary-light, #e3f2fd),
+    0 0 20px rgba(59, 130, 246, 0.15);
+  /* Blue glow */
+  border-color: var(--color-primary);
+}
+
+.topic-card--locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.topic-card__lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.topic-card__lock-icon {
+  font-size: 48px;
+}
+
+.topic-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.topic-card__icon {
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topic-card__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  flex: 1;
+}
+
+.topic-card__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.topic-card__stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.topic-card__count {
+  color: var(--color-text-secondary);
+}
+
+.topic-card__percentage {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.topic-card__badge {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background-color: var(--color-success);
+  color: white;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.topic-card__badge-icon {
+  font-size: 16px;
+}

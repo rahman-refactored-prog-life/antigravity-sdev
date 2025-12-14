@@ -1,0 +1,99 @@
+.showcase {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-8);
+}
+
+.showcase__header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.showcase__header h1 {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+}
+
+.showcase__header p {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+.showcase__section {
+  margin-bottom: var(--space-16);
+}
+
+.showcase__section h2 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--space-8);
+  color: var(--color-text-primary);
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: var(--space-4);
+}
+
+.showcase__section h3 {
+  font-size: var(--font-size-xl);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-secondary);
+}
+
+.showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.showcase__grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.showcase__grid--4 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.showcase__button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.showcase__animation-demo {
+  padding: var(--space-6);
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+  color: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-md);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stagger-children {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+@media (max-width: 768px) {
+  .showcase {
+    padding: var(--space-4);
+  }
+  
+  .showcase__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .showcase__grid--3,
+  .showcase__grid--4 {
+    grid-template-columns: 1fr;
+  }
+}

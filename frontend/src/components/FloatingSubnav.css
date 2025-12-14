@@ -1,0 +1,118 @@
+.aws-subnav-container {
+    position: fixed;
+    top: 84px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: auto;
+    max-width: 90vw;
+}
+
+.aws-subnav-pill {
+    background-color: var(--color-white);
+    backdrop-filter: blur(8px);
+    border-radius: 30px;
+    box-shadow: var(--shadow-lg);
+    padding: 10px 30px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    border: 1px solid var(--color-gray-200);
+    transition: all 0.2s ease;
+    z-index: 2000;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .aws-subnav-pill {
+        background-color: var(--color-gray-800);
+        border-color: var(--color-gray-700);
+        box-shadow: var(--shadow-xl);
+    }
+}
+
+.aws-subnav-brand {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--color-gray-900);
+    margin: 0;
+    white-space: nowrap;
+    padding-right: 12px;
+    border-right: 1px solid var(--color-gray-200);
+}
+
+.aws-subnav-menu-container {
+    display: flex;
+    align-items: center;
+}
+
+.aws-subnav-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.aws-subnav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.aws-subnav-link,
+.aws-subnav-trigger {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 12px;
+    color: var(--color-gray-600);
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.aws-subnav-link:hover,
+.aws-subnav-trigger:hover,
+.aws-subnav-link.active,
+.aws-subnav-trigger.active {
+    color: var(--color-gray-900);
+    background-color: var(--color-gray-100);
+}
+
+@media (prefers-color-scheme: dark) {
+    .aws-subnav-brand {
+        color: var(--color-gray-100);
+        border-right: 1px solid var(--color-gray-600);
+    }
+
+    .aws-subnav-link,
+    .aws-subnav-trigger {
+        color: var(--color-gray-300);
+    }
+
+    .aws-subnav-link:hover,
+    .aws-subnav-trigger:hover,
+    .aws-subnav-link.active,
+    .aws-subnav-trigger.active {
+        color: var(--color-gray-100);
+        background-color: var(--color-gray-700);
+    }
+}
+
+.aws-icon-chevron {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s ease;
+    opacity: 0.7;
+}
+
+.aws-subnav-trigger.active .aws-icon-chevron {
+    transform: rotate(180deg);
+}
