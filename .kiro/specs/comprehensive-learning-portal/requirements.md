@@ -91,7 +91,7 @@ This specification defines the requirements for building the world's most compre
 4. THE Learning_Portal_System SHALL implement Progressive_Learning_Path with 6 levels (Level 0: Discover, Level 1: Understand, Level 2: Apply, Level 3: Optimize, Level 4: Extend, Level 5: Interview)
 5. THE Learning_Portal_System SHALL provide code implementations in 5 languages (Java, Python, JavaScript, C++, Go) for every topic
 6. THE Learning_Portal_System SHALL include 15+ practice problems per topic (3+ core exercises, 5+ edge case drills, 3+ challenge problems, 1+ mini-project, 10+ quiz questions)
-7. THE Learning_Portal_System SHALL provide 10+ real FAANG interview questions per topic with progressive hints, step-by-step solutions in all 5 languages, and complexity analysis
+7. THE Learning_Portal_System SHALL provide 35+ real FAANG interview questions per topic (Total 50+ questions/topic) with progressive hints, step-by-step solutions in all 5 languages, and complexity analysis - sourced from LeetCode, GeeksforGeeks, etc.
 8. THE Learning_Portal_System SHALL integrate system design considerations including scaling, distributed systems, observability, and failure modes for every topic
 9. THE Learning_Portal_System SHALL provide comprehensive cheatsheet with quick reference, formulas, code snippets, complexity tables, and decision trees for every topic
 10. THE Learning_Portal_System SHALL include curated references with books, research papers, video lectures, tutorials, and learning paths for every topic

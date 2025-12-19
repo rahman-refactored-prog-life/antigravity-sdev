@@ -131,10 +131,10 @@ Color Hierarchy:
 ```typescript
 interface ComponentColorScheme {
   sidebar: {
-    background: 'var(--bg-primary)',
-    text: 'var(--text-primary)',
-    hover: 'var(--bg-secondary)',
-    active: 'var(--color-primary-light)'
+    background: '#0f172a', // Dark blue-gray (Slate 900)
+    text: '#ffffff', // Pure white for maximum contrast
+    hover: '#1e293b', // Lighter slate for hover
+    active: '#3b82f6' // Primary blue for active states
   },
   floatingHeader: {
     background: 'rgba(255, 255, 255, 0.95)',
@@ -778,7 +778,7 @@ cat TOPIC_CONTENT_TEMPLATE.md \
 - [ ] Code in all 5 languages
 - [ ] All code tested with unit tests
 - [ ] 15+ practice problems (3 core + 5 drills + 3 challenges + 1 project + 10 quiz)
-- [ ] 10+ interview questions with full solutions
+- [ ] 35+ interview questions with full solutions (Total 50+ questions per topic)
 - [ ] System design integration
 - [ ] Comprehensive cheatsheet
 - [ ] Curated references

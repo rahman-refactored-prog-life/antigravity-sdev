@@ -25,7 +25,7 @@ import java.util.Optional;
  * Service to load learning content from markdown files into the database.
  * Runs on application startup and loads content if not already present.
  */
-@Service
+// @Service // Disabled in favor of ContentDataInitializer
 public class ContentLoaderService implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(ContentLoaderService.class);
@@ -34,7 +34,7 @@ public class ContentLoaderService implements CommandLineRunner {
     private final TopicRepository topicRepository;
 
     public ContentLoaderService(LearningModuleRepository moduleRepository,
-                                TopicRepository topicRepository) {
+            TopicRepository topicRepository) {
         this.moduleRepository = moduleRepository;
         this.topicRepository = topicRepository;
     }
@@ -47,7 +47,7 @@ public class ContentLoaderService implements CommandLineRunner {
             logger.info("Content already loaded. Skipping initialization.");
             return;
         }
-        
+
         logger.info("Starting content loading process...");
 
         // Load Java module and topics
@@ -83,8 +83,8 @@ public class ContentLoaderService implements CommandLineRunner {
     }
 
     private void loadTopic(LearningModule module, String title, String description,
-                           String contentFilePath, int orderIndex,
-                           DifficultyLevel difficulty, int estimatedMinutes) {
+            String contentFilePath, int orderIndex,
+            DifficultyLevel difficulty, int estimatedMinutes) {
         // Check if topic already exists
         Optional<Topic> existingTopic = topicRepository.findByModuleAndTitle(module, title);
         if (existingTopic.isPresent()) {

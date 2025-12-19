@@ -1,44 +1,37 @@
 .aws-subnav-container {
     position: fixed;
-    top: 84px;
+    top: 88px;
+    /* Below global header (64px) + spacing */
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1000;
+    z-index: 999;
+    /* Below sidebar/modals but above content */
     width: auto;
-    max-width: 90vw;
+    max-width: 90%;
 }
 
 .aws-subnav-pill {
-    background-color: var(--color-white);
-    backdrop-filter: blur(8px);
-    border-radius: 30px;
-    box-shadow: var(--shadow-lg);
-    padding: 10px 30px;
+    background: rgba(22, 27, 34, 0.8);
+    /* Dark glass */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    padding: 0.5rem 1.5rem;
     display: flex;
     align-items: center;
-    gap: 24px;
-    border: 1px solid var(--color-gray-200);
-    transition: all 0.2s ease;
-    z-index: 2000;
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    .aws-subnav-pill {
-        background-color: var(--color-gray-800);
-        border-color: var(--color-gray-700);
-        box-shadow: var(--shadow-xl);
-    }
+    gap: 1.5rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
 .aws-subnav-brand {
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--color-gray-900);
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
     margin: 0;
     white-space: nowrap;
-    padding-right: 12px;
-    border-right: 1px solid var(--color-gray-200);
+    opacity: 0.9;
 }
 
 .aws-subnav-menu-container {
@@ -47,72 +40,114 @@
 }
 
 .aws-subnav-list {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style: none;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
 
 .aws-subnav-item {
     position: relative;
-    display: flex;
-    align-items: center;
 }
 
 .aws-subnav-link,
 .aws-subnav-trigger {
     background: transparent;
     border: none;
-    cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 12px;
-    color: var(--color-gray-600);
-    font-size: 14px;
+    color: #8b949e;
+    font-size: 0.85rem;
     font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 4px;
-    transition: all 0.2s ease;
+    gap: 0.25rem;
     text-decoration: none;
 }
 
 .aws-subnav-link:hover,
-.aws-subnav-trigger:hover,
-.aws-subnav-link.active,
-.aws-subnav-trigger.active {
-    color: var(--color-gray-900);
-    background-color: var(--color-gray-100);
+.aws-subnav-trigger:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-    .aws-subnav-brand {
-        color: var(--color-gray-100);
-        border-right: 1px solid var(--color-gray-600);
-    }
-
-    .aws-subnav-link,
-    .aws-subnav-trigger {
-        color: var(--color-gray-300);
-    }
-
-    .aws-subnav-link:hover,
-    .aws-subnav-trigger:hover,
-    .aws-subnav-link.active,
-    .aws-subnav-trigger.active {
-        color: var(--color-gray-100);
-        background-color: var(--color-gray-700);
-    }
+.aws-subnav-link.active,
+.aws-subnav-trigger.active {
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .aws-icon-chevron {
-    width: 12px;
-    height: 12px;
-    transition: transform 0.2s ease;
+    width: 10px;
+    height: 10px;
     opacity: 0.7;
+    transition: transform 0.2s ease;
 }
 
 .aws-subnav-trigger.active .aws-icon-chevron {
     transform: rotate(180deg);
+}
+
+.nav-icon {
+    margin-right: 6px;
+    opacity: 0.8;
+}
+
+.aws-subnav-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+
+/* Practice Button Special Style */
+.practice-btn {
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    color: #58a6ff;
+}
+
+.practice-btn:hover {
+    background: rgba(88, 166, 255, 0.15);
+    color: #58a6ff;
+    border-color: #58a6ff;
+}
+
+/* Dropdown */
+.aws-subnav-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e2329;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.5rem;
+    min-width: 180px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.aws-subnav-dropdown button {
+    background: transparent;
+    border: none;
+    color: #c9d1d9;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.aws-subnav-dropdown button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
 }

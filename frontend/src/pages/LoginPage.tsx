@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Button, Input, Card } from '../components';
-import './AuthPages.css';
+import { Loading } from '../components/Loading';
+import { ErrorMessage } from '../components/ErrorMessage';
+import './LoginPage.css';
 
 export const LoginPage: React.FC = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
@@ -46,45 +47,56 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="auth-page">
-      <Card className="auth-card">
-        <div className="auth-header">
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-header">
           <h1>Welcome Back</h1>
-          <p>Sign in to continue your learning journey</p>
+          <p>Sign in to continue your journey</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <Input
-            label="Username or Email"
-            type="text"
-            value={usernameOrEmail}
-            onChange={(e) => setUsernameOrEmail(e.target.value)}
-            required
-            fullWidth
-          />
+        {error && <ErrorMessage message={error} />}
 
-          <Input
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            fullWidth
-          />
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="usernameOrEmail">Username or Email</label>
+            <input
+              type="text"
+              id="usernameOrEmail"
+              className="form-input"
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
+              required
+              placeholder="Enter your username"
+            />
+          </div>
 
-          {error && <div className="auth-error">{error}</div>}
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              className="form-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="••••••••"
+            />
+          </div>
 
-          <Button type="submit" fullWidth loading={isLoading}>
-            Sign In
-          </Button>
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={isLoading}
+          >
+            {isLoading ? <Loading /> : 'Sign In'}
+          </button>
         </form>
 
         <div className="auth-footer">
-          <p>
-            Don't have an account? <Link to="/register">Sign up</Link>
-          </p>
+          Don't have an account?
+          <a href="/register" className="auth-link">Create Account</a>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

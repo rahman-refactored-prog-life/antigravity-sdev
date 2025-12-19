@@ -7,6 +7,7 @@ import {
   EnhancedButton,
   QuestionCard
 } from '../components';
+import './DashboardPage.css';
 
 export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -32,22 +33,17 @@ export const DashboardPage: React.FC = () => {
   ];
 
   return (
-    <div className="dashboard-page fade-in" style={{ padding: 'var(--space-8)' }}>
+    <div className="dashboard-page fade-in">
       {/* Welcome Section */}
-      <div className="slide-in-up" style={{ marginBottom: 'var(--space-8)' }}>
-        <h1 style={{ marginBottom: 'var(--space-2)' }}>Welcome back, {user?.username}! 👋</h1>
+      <div className="dashboard-welcome slide-in-up">
+        <h1>Welcome back, {user?.username}! 👋</h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-lg)' }}>
           Continue your learning journey
         </p>
       </div>
 
       {/* Stats Cards with Enhanced Components */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-        gap: 'var(--space-4)',
-        marginBottom: 'var(--space-8)'
-      }}>
+      <div className="dashboard-stats-grid">
         <div className="stagger-1">
           <StatCard
             title="Your Progress"
@@ -57,7 +53,7 @@ export const DashboardPage: React.FC = () => {
             color="var(--color-success)"
           />
         </div>
-        
+
         <div className="stagger-2">
           <StatCard
             title="Current Streak"
@@ -67,7 +63,7 @@ export const DashboardPage: React.FC = () => {
             color="var(--color-warning)"
           />
         </div>
-        
+
         <div className="stagger-3">
           <StatCard
             title="Questions Solved"
@@ -80,18 +76,14 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Recent Topics with Enhanced ModuleCard */}
-      <div style={{ marginBottom: 'var(--space-8)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
+      <div className="dashboard-section">
+        <div className="section-header">
           <h2>Continue Learning</h2>
           <EnhancedButton variant="primary" onClick={() => navigate('/modules/java')}>
             View All Available Learnings →
           </EnhancedButton>
         </div>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-          gap: 'var(--space-4)' 
-        }}>
+        <div className="modules-grid">
           <ModuleCard
             title="Java Programming"
             description="Master Java from fundamentals to advanced concepts"
@@ -107,7 +99,7 @@ export const DashboardPage: React.FC = () => {
             difficulty="Easy"
             progress={75}
             topicCount={20}
-            onClick={() => console.log('Navigate to arrays')}
+            onClick={() => navigate('/modules/arrays-strings')}
           />
           <ModuleCard
             title="Linked Lists"
@@ -116,7 +108,7 @@ export const DashboardPage: React.FC = () => {
             difficulty="Medium"
             progress={40}
             topicCount={20}
-            onClick={() => console.log('Navigate to linked lists')}
+            onClick={() => navigate('/modules/linked-lists')}
           />
           <ModuleCard
             title="Binary Trees"
@@ -125,15 +117,17 @@ export const DashboardPage: React.FC = () => {
             difficulty="Medium"
             progress={20}
             topicCount={20}
-            onClick={() => console.log('Navigate to trees')}
+            onClick={() => navigate('/modules/binary-trees')}
           />
         </div>
       </div>
 
       {/* Recent Questions */}
-      <div>
-        <h2 style={{ marginBottom: 'var(--space-4)' }}>Recent Questions</h2>
-        <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
+      <div className="dashboard-section">
+        <div className="section-header">
+          <h2>Recent Questions</h2>
+        </div>
+        <div className="questions-grid">
           {recentQuestions.map(question => (
             <QuestionCard
               key={question.id}

@@ -1,6 +1,8 @@
 package com.learningportal.controller;
 
+import com.learningportal.dto.CodeExampleDTO;
 import com.learningportal.dto.LearningModuleDTO;
+import com.learningportal.dto.PracticeQuestionDTO;
 import com.learningportal.dto.TopicDTO;
 import com.learningportal.entity.*;
 import com.learningportal.service.LearningService;
@@ -157,45 +159,51 @@ public class LearningController {
     
     @GetMapping("/topics/{topicId}/questions")
     @Operation(summary = "Get questions by topic", description = "Retrieve all practice questions for a topic")
-    public ResponseEntity<List<PracticeQuestion>> getQuestionsByTopic(
+    public ResponseEntity<List<PracticeQuestionDTO>> getQuestionsByTopic(
             @Parameter(description = "Topic ID") @PathVariable Long topicId) {
         List<PracticeQuestion> questions = learningService.getQuestionsByTopic(topicId);
-        return ResponseEntity.ok(questions);
+        List<PracticeQuestionDTO> dtos = questions.stream()
+                .map(this::convertToPracticeQuestionDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
     
     @GetMapping("/topics/{topicId}/questions/type/{type}")
     @Operation(summary = "Get questions by type", description = "Retrieve questions filtered by type")
-    public ResponseEntity<List<PracticeQuestion>> getQuestionsByType(
+    public ResponseEntity<List<PracticeQuestionDTO>> getQuestionsByType(
             @Parameter(description = "Topic ID") @PathVariable Long topicId,
             @Parameter(description = "Question type") @PathVariable QuestionType type) {
         List<PracticeQuestion> questions = learningService.getQuestionsByType(topicId, type);
-        return ResponseEntity.ok(questions);
+        List<PracticeQuestionDTO> dtos = questions.stream()
+                .map(this::convertToPracticeQuestionDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
     
     @GetMapping("/questions/{id}")
     @Operation(summary = "Get question by ID", description = "Retrieve a specific practice question")
-    public ResponseEntity<PracticeQuestion> getQuestionById(
+    public ResponseEntity<PracticeQuestionDTO> getQuestionById(
             @Parameter(description = "Question ID") @PathVariable Long id) {
         PracticeQuestion question = learningService.getQuestionById(id);
-        return ResponseEntity.ok(question);
+        return ResponseEntity.ok(convertToPracticeQuestionDTO(question));
     }
     
     @PostMapping("/topics/{topicId}/questions")
     @Operation(summary = "Create question", description = "Create a new practice question")
-    public ResponseEntity<PracticeQuestion> createQuestion(
+    public ResponseEntity<PracticeQuestionDTO> createQuestion(
             @Parameter(description = "Topic ID") @PathVariable Long topicId,
             @RequestBody PracticeQuestion question) {
         PracticeQuestion created = learningService.createQuestion(topicId, question);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertToPracticeQuestionDTO(created));
     }
     
     @PutMapping("/questions/{id}")
     @Operation(summary = "Update question", description = "Update an existing practice question")
-    public ResponseEntity<PracticeQuestion> updateQuestion(
+    public ResponseEntity<PracticeQuestionDTO> updateQuestion(
             @Parameter(description = "Question ID") @PathVariable Long id,
             @RequestBody PracticeQuestion question) {
         PracticeQuestion updated = learningService.updateQuestion(id, question);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(convertToPracticeQuestionDTO(updated));
     }
     
     @DeleteMapping("/questions/{id}")
@@ -210,45 +218,48 @@ public class LearningController {
     
     @GetMapping("/topics/{topicId}/code-examples")
     @Operation(summary = "Get code examples by topic", description = "Retrieve all code examples for a topic")
-    public ResponseEntity<List<CodeExample>> getCodeExamplesByTopic(
+    public ResponseEntity<List<CodeExampleDTO>> getCodeExamplesByTopic(
             @Parameter(description = "Topic ID") @PathVariable Long topicId) {
         List<CodeExample> examples = learningService.getCodeExamplesByTopic(topicId);
-        return ResponseEntity.ok(examples);
+        List<CodeExampleDTO> dtos = examples.stream()
+                .map(this::convertTocodeExampleDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
     
     @GetMapping("/topics/{topicId}/code-examples/{language}")
     @Operation(summary = "Get code example by language", description = "Retrieve code example for a specific language")
-    public ResponseEntity<CodeExample> getCodeExampleByLanguage(
+    public ResponseEntity<CodeExampleDTO> getCodeExampleByLanguage(
             @Parameter(description = "Topic ID") @PathVariable Long topicId,
             @Parameter(description = "Programming language") @PathVariable ProgrammingLanguage language) {
         CodeExample example = learningService.getCodeExampleByTopicAndLanguage(topicId, language);
-        return ResponseEntity.ok(example);
+        return ResponseEntity.ok(convertTocodeExampleDTO(example));
     }
     
     @GetMapping("/code-examples/{id}")
     @Operation(summary = "Get code example by ID", description = "Retrieve a specific code example")
-    public ResponseEntity<CodeExample> getCodeExampleById(
+    public ResponseEntity<CodeExampleDTO> getCodeExampleById(
             @Parameter(description = "Code example ID") @PathVariable Long id) {
         CodeExample example = learningService.getCodeExampleById(id);
-        return ResponseEntity.ok(example);
+        return ResponseEntity.ok(convertTocodeExampleDTO(example));
     }
     
     @PostMapping("/topics/{topicId}/code-examples")
     @Operation(summary = "Create code example", description = "Create a new code example")
-    public ResponseEntity<CodeExample> createCodeExample(
+    public ResponseEntity<CodeExampleDTO> createCodeExample(
             @Parameter(description = "Topic ID") @PathVariable Long topicId,
             @RequestBody CodeExample codeExample) {
         CodeExample created = learningService.createCodeExample(topicId, codeExample);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertTocodeExampleDTO(created));
     }
     
     @PutMapping("/code-examples/{id}")
     @Operation(summary = "Update code example", description = "Update an existing code example")
-    public ResponseEntity<CodeExample> updateCodeExample(
+    public ResponseEntity<CodeExampleDTO> updateCodeExample(
             @Parameter(description = "Code example ID") @PathVariable Long id,
             @RequestBody CodeExample codeExample) {
         CodeExample updated = learningService.updateCodeExample(id, codeExample);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(convertTocodeExampleDTO(updated));
     }
     
     @DeleteMapping("/code-examples/{id}")
@@ -286,5 +297,26 @@ public class LearningController {
         dto.setModuleId(topic.getModule().getId());
         dto.setModuleName(topic.getModule().getName());
         return dto;
+    }
+
+    private PracticeQuestionDTO convertToPracticeQuestionDTO(PracticeQuestion question) {
+        return new PracticeQuestionDTO(
+                question.getId(),
+                question.getTitle(),
+                question.getDescription(),
+                question.getType(),
+                question.getTopic().getId()
+        );
+    }
+
+    private CodeExampleDTO convertTocodeExampleDTO(CodeExample example) {
+        return new CodeExampleDTO(
+                example.getId(),
+                example.getTitle(),
+                example.getDescription(),
+                example.getLanguage(),
+                example.getCode(),
+                example.getTopic().getId()
+        );
     }
 }

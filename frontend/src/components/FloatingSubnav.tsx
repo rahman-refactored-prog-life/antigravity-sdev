@@ -1,9 +1,22 @@
 
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {
+    FileText,
+    Mic,
+    StickyNote,
+    Terminal,
+    ChevronDown,
+    BookOpen,
+    LayoutDashboard
+} from 'lucide-react';
 import './FloatingSubnav.css';
 
-export const FloatingSubnav: React.FC = () => {
+interface FloatingSubnavProps {
+    onTogglePractice: () => void;
+}
+
+export const FloatingSubnav: React.FC<FloatingSubnavProps> = ({ onTogglePractice }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -24,46 +37,70 @@ export const FloatingSubnav: React.FC = () => {
                         {/* Overview */}
                         <li className="aws-subnav-item">
                             <button
-                                className={`aws-subnav-link ${isActive('/') ? 'active' : ''}`}
+                                className={`aws-subnav-link ${isActive('/') && location.pathname === '/' ? 'active' : ''}`}
                                 onClick={() => navigate('/')}
                             >
+                                <LayoutDashboard size={14} className="nav-icon" />
                                 <span>Overview</span>
                             </button>
                         </li>
 
-                        {/* Modules (Capabilities style) */}
+                        {/* Modules */}
                         <li className="aws-subnav-item">
                             <button
                                 className={`aws-subnav-trigger ${activeMenu === 'modules' ? 'active' : ''}`}
                                 onClick={() => toggleMenu('modules')}
                                 onBlur={() => setTimeout(() => setActiveMenu(null), 200)}
                             >
+                                <BookOpen size={14} className="nav-icon" />
                                 <span>Modules</span>
-                                <svg className="aws-icon-chevron" viewBox="0 0 16 16">
-                                    <path d="M8 11L3.79 6.79L5.2 5.38L8 8.18L10.8 5.38L12.21 6.79L8 11Z" fill="currentColor" />
-                                </svg>
+                                <ChevronDown size={12} className={`aws-icon-chevron ${activeMenu === 'modules' ? 'rotated' : ''}`} />
                             </button>
 
-                            {/* Dropdown would go here, simplified navigation for now */}
+                            {/* Simplified Modules Dropdown */}
+                            {activeMenu === 'modules' && (
+                                <div className="aws-subnav-dropdown">
+                                    <button onClick={() => navigate('/modules/java')}>Java Fundamentals</button>
+                                    <button onClick={() => navigate('/modules/dsa')}>Data Structures</button>
+                                </div>
+                            )}
                         </li>
 
-                        {/* Practice */}
+                        {/* Resources (Central Hubs) */}
                         <li className="aws-subnav-item">
                             <button
-                                className={`aws-subnav-link ${isActive('/practice') ? 'active' : ''}`}
-                                onClick={() => navigate('/practice')}
+                                className={`aws-subnav-trigger ${activeMenu === 'resources' ? 'active' : ''}`}
+                                onClick={() => toggleMenu('resources')}
+                                onBlur={() => setTimeout(() => setActiveMenu(null), 200)}
                             >
+                                <FileText size={14} className="nav-icon" />
+                                <span>Resources</span>
+                                <ChevronDown size={12} className={`aws-icon-chevron ${activeMenu === 'resources' ? 'rotated' : ''}`} />
+                            </button>
+
+                            {activeMenu === 'resources' && (
+                                <div className="aws-subnav-dropdown">
+                                    <button onClick={() => navigate('/cheatsheet')}>
+                                        <FileText size={14} /> Cheatsheets
+                                    </button>
+                                    <button onClick={() => navigate('/interview-questions')}>
+                                        <Mic size={14} /> Interview Bank
+                                    </button>
+                                    <button onClick={() => navigate('/notes')}>
+                                        <StickyNote size={14} /> My Notes
+                                    </button>
+                                </div>
+                            )}
+                        </li>
+
+                        {/* Practice Toggle */}
+                        <li className="aws-subnav-item">
+                            <button
+                                className="aws-subnav-link practice-btn"
+                                onClick={onTogglePractice}
+                            >
+                                <Terminal size={14} className="nav-icon" />
                                 <span>Practice</span>
-                            </button>
-                        </li>
-
-                        {/* Career */}
-                        <li className="aws-subnav-item">
-                            <button
-                                className={`aws-subnav-link ${isActive('/career') ? 'active' : ''}`}
-                                onClick={() => navigate('/career')}
-                            >
-                                <span>Career</span>
                             </button>
                         </li>
                     </ul>

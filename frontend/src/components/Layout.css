@@ -21,11 +21,13 @@
   overflow-x: hidden;
   background-color: var(--bg-secondary);
   transition: margin-left var(--transition-base);
-  margin-left: 280px; /* Offset when sidebar is open */
+  margin-left: 260px;
+  /* Push Layout */
+  width: auto;
 }
 
 .main-content.sidebar-collapsed {
-  margin-left: 0; /* No offset when sidebar is closed */
+  margin-left: 0;
 }
 
 /* Responsive */
@@ -33,7 +35,7 @@
   .main-content {
     margin-left: 0 !important;
   }
-  
+
   .layout-container {
     flex-direction: column;
   }

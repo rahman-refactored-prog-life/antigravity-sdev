@@ -4,6 +4,7 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Loading } from '../components/Loading';
 import { Search } from '../components/Search';
+import { Pagination } from '../components/Pagination';
 import './NotesPage.css';
 
 interface NoteEntry {
@@ -26,6 +27,8 @@ export const NotesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedModule, setSelectedModule] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState<'date' | 'module' | 'length'>('date');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(9);
 
   useEffect(() => {
     loadNotesData();
@@ -38,22 +41,22 @@ export const NotesPage: React.FC = () => {
   const loadNotesData = async () => {
     try {
       setLoading(true);
-      
+
       // Load all modules
       const modulesList = await learningService.getAllModules();
       setModules(modulesList);
-      
+
       // Load all topics for each module
       const topicsMap = new Map<number, Topic>();
       const allNotes: NoteEntry[] = [];
-      
+
       for (const module of modulesList) {
         try {
           const topicsResponse = await learningService.getTopicsByModule(module.id, 0, 100);
-          
+
           for (const topic of topicsResponse.content) {
             topicsMap.set(topic.id, topic);
-            
+
             // Check if there's a note for this topic
             const noteContent = localStorage.getItem(`topic_note_${topic.id}`);
             if (noteContent && noteContent.trim()) {
@@ -72,7 +75,7 @@ export const NotesPage: React.FC = () => {
           console.error(`Error loading topics for module ${module.name}:`, error);
         }
       }
-      
+
       // setTopics(topicsMap); // Store for future use if needed
       setNotes(allNotes);
     } catch (error) {
@@ -84,22 +87,22 @@ export const NotesPage: React.FC = () => {
 
   const filterAndSortNotes = () => {
     let filtered = [...notes];
-    
+
     // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(note => 
+      filtered = filtered.filter(note =>
         note.topicTitle.toLowerCase().includes(term) ||
         note.moduleName.toLowerCase().includes(term) ||
         note.content.toLowerCase().includes(term)
       );
     }
-    
+
     // Filter by module
     if (selectedModule) {
       filtered = filtered.filter(note => note.moduleId === selectedModule);
     }
-    
+
     // Sort notes
     filtered.sort((a, b) => {
       switch (sortBy) {
@@ -113,7 +116,7 @@ export const NotesPage: React.FC = () => {
           return 0;
       }
     });
-    
+
     setFilteredNotes(filtered);
   };
 
@@ -133,7 +136,7 @@ export const NotesPage: React.FC = () => {
       lastModified: note.lastModified.toISOString(),
       wordCount: note.wordCount
     }));
-    
+
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -171,7 +174,7 @@ export const NotesPage: React.FC = () => {
           <h1>📝 My Learning Notes</h1>
           <p>All your learning notes, insights, and key takeaways organized in one place.</p>
         </div>
-        
+
         <div className="header-stats">
           <div className="stat-item">
             <span className="stat-number">{notes.length}</span>
@@ -194,9 +197,9 @@ export const NotesPage: React.FC = () => {
             placeholder="Search notes, topics, or modules..."
             onSearch={setSearchTerm}
           />
-          
-          <select 
-            value={selectedModule || ''} 
+
+          <select
+            value={selectedModule || ''}
             onChange={(e) => setSelectedModule(e.target.value ? Number(e.target.value) : null)}
             className="module-filter"
           >
@@ -205,9 +208,9 @@ export const NotesPage: React.FC = () => {
               <option key={module.id} value={module.id}>{module.name}</option>
             ))}
           </select>
-          
-          <select 
-            value={sortBy} 
+
+          <select
+            value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'date' | 'module' | 'length')}
             className="sort-select"
           >
@@ -216,7 +219,7 @@ export const NotesPage: React.FC = () => {
             <option value="length">Sort by Length</option>
           </select>
         </div>
-        
+
         <div className="action-buttons">
           <Button variant="secondary" onClick={loadNotesData}>
             🔄 Refresh
@@ -235,51 +238,69 @@ export const NotesPage: React.FC = () => {
             <div className="empty-icon">📝</div>
             <h3>No notes found</h3>
             <p>
-              {notes.length === 0 
+              {notes.length === 0
                 ? "You haven't created any notes yet. Start taking notes while studying topics!"
                 : "No notes match your current filters. Try adjusting your search or filters."
               }
             </p>
           </div>
         ) : (
-          <div className="notes-grid">
-            {filteredNotes.map((note) => (
-              <Card key={note.topicId} className="note-card">
-                <div className="note-header">
-                  <div className="note-meta">
-                    <span className="module-badge">{note.moduleName}</span>
-                    <span className="topic-title">{note.topicTitle}</span>
+          <>
+            <div className="notes-grid">
+              {filteredNotes.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((note) => (
+                <Card key={note.topicId} className="note-card">
+                  <div className="note-header">
+                    <div className="note-meta">
+                      <span className="module-badge">{note.moduleName}</span>
+                      <span className="topic-title">{note.topicTitle}</span>
+                    </div>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDeleteNote(note.topicId)}
+                      title="Delete note"
+                    >
+                      🗑️
+                    </button>
                   </div>
-                  <button 
-                    className="delete-btn"
-                    onClick={() => handleDeleteNote(note.topicId)}
-                    title="Delete note"
-                  >
-                    🗑️
-                  </button>
-                </div>
-                
-                <div className="note-content">
-                  <p>{truncateContent(note.content)}</p>
-                </div>
-                
-                <div className="note-footer">
-                  <div className="note-stats">
-                    <span>{note.wordCount} words</span>
-                    <span>•</span>
-                    <span>{formatDate(note.lastModified)}</span>
+
+                  <div className="note-content">
+                    <p>{truncateContent(note.content)}</p>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => window.open(`/topics/${note.topicId}`, '_blank')}
-                  >
-                    View Topic →
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
+
+                  <div className="note-footer">
+                    <div className="note-stats">
+                      <span>{note.wordCount} words</span>
+                      <span>•</span>
+                      <span>{formatDate(note.lastModified)}</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => window.open(`/topics/${note.topicId}`, '_blank')}
+                    >
+                      View Topic →
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {filteredNotes.length > pageSize && (
+              <div className="pagination-container" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={Math.ceil(filteredNotes.length / pageSize)}
+                  pageSize={pageSize}
+                  totalItems={filteredNotes.length}
+                  onPageChange={setCurrentPage}
+                  onPageSizeChange={setPageSize}
+                  showPageSize={true}
+                  pageSizeOptions={[9, 18, 27, 45]}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FloatingSubnav } from './FloatingSubnav';
 import './GlobalHeader.css';
 
 interface GlobalHeaderProps {
@@ -70,7 +69,7 @@ export const GlobalHeader: React.FC<GlobalHeaderProps> = ({ user, onToggleSideba
 
       {/* Secondary Nav below header */}
       <div style={{ position: 'sticky', top: '70px', zIndex: 900 }}>
-        <FloatingSubnav />
+        {/* FloatingSubnav moved to Layout.tsx */}
       </div>
     </>
   );

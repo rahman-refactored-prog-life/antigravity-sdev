@@ -5,7 +5,7 @@ import { Layout } from './components/Layout'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { DashboardPage } from './pages/DashboardPage'
-import { JavaModulePage } from './pages/JavaModulePage'
+import { ModulePage } from './pages/ModulePage'
 import { TopicDetailPage } from './pages/TopicDetailPage'
 import { CheatsheetPage } from './pages/CheatsheetPage'
 import { InterviewQuestionsPage } from './pages/InterviewQuestionsPage'
@@ -31,11 +31,11 @@ function App() {
             }
           />
           <Route
-            path="/modules/java"
+            path="/modules/:moduleType"
             element={
               <ProtectedRoute>
                 <Layout>
-                  <JavaModulePage />
+                  <ModulePage />
                 </Layout>
               </ProtectedRoute>
             }
@@ -90,7 +90,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/* Practice and Career placeholders routed to Dashboard for now or their own pages if created later */}
+          {/* Practice and Career placeholders routed to Dashboard for now */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>

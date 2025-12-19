@@ -11,6 +11,7 @@ interface PaginationProps {
   pageSizeOptions?: number[];
   showPageSize?: boolean;
   showInfo?: boolean;
+  itemName?: string; // New prop for custom item name (e.g., "Sections", "Topics")
   className?: string;
 }
 
@@ -24,6 +25,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   pageSizeOptions = [10, 25, 50, 100],
   showPageSize = true,
   showInfo = true,
+  itemName = 'items',
   className = '',
 }) => {
   const startItem = (currentPage - 1) * pageSize + 1;
@@ -39,22 +41,22 @@ export const Pagination: React.FC<PaginationProps> = ({
       }
     } else {
       pages.push(1);
-      
+
       if (currentPage > 3) {
         pages.push('...');
       }
-      
+
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
-      
+
       if (currentPage < totalPages - 2) {
         pages.push('...');
       }
-      
+
       pages.push(totalPages);
     }
 
@@ -64,11 +66,11 @@ export const Pagination: React.FC<PaginationProps> = ({
   return (
     <div className={`pagination ${className}`}>
       {showInfo && (
-        <div className="pagination__info">
-          Showing {startItem}-{endItem} of {totalItems} items
-        </div>
+        <span className="info-text">
+          Showing {startItem} to {endItem} of {totalItems} {itemName}
+        </span>
       )}
-      
+
       <div className="pagination__controls">
         <button
           className="pagination__button"
@@ -77,7 +79,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         >
           Previous
         </button>
-        
+
         {getPageNumbers().map((page, index) => (
           typeof page === 'number' ? (
             <button
@@ -91,7 +93,7 @@ export const Pagination: React.FC<PaginationProps> = ({
             <span key={index} className="pagination__ellipsis">{page}</span>
           )
         ))}
-        
+
         <button
           className="pagination__button"
           onClick={() => onPageChange(currentPage + 1)}
@@ -100,7 +102,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           Next
         </button>
       </div>
-      
+
       {showPageSize && onPageSizeChange && (
         <div className="pagination__page-size">
           <label htmlFor="page-size">Items per page:</label>

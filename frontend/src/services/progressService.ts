@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:2025/api';
+const API_BASE_URL = 'http://localhost:9095/api';
 
 export interface UserProgress {
   id: number;

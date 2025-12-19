@@ -42,6 +42,8 @@ export interface Topic {
   moduleName?: string;
   questionCount?: number;
   codeExampleCount?: number;
+  totalInterviewQuestions?: number;
+  totalPracticeQuestions?: number;
 }
 
 export interface PaginatedResponse<T> {

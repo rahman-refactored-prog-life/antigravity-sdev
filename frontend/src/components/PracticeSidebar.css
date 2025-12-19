@@ -1,0 +1,77 @@
+.practice-sidebar {
+  position: fixed;
+  top: 64px; /* Below GlobalHeader */
+  right: -600px; /* Start off-screen */
+  width: 600px;
+  height: calc(100vh - 64px);
+  background-color: var(--bg-secondary);
+  border-left: 1px solid var(--border-primary);
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 900; /* Below modals (1000) but above content */
+  display: flex;
+  flex-direction: column;
+}
+
+.practice-sidebar.open {
+  right: 0;
+}
+
+.practice-header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-secondary);
+  background-color: var(--bg-primary);
+}
+
+.practice-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 0 0.5rem;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: var(--text-primary);
+}
+
+.practice-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Adjust CodeEditor to fit full height of sidebar */
+.editor-container .code-editor {
+  border: none;
+  border-radius: 0;
+}
+
+@media (max-width: 768px) {
+  .practice-sidebar {
+    width: 100%;
+    right: -100%;
+  }
+}
