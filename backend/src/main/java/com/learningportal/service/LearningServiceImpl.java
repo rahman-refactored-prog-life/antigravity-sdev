@@ -13,24 +13,24 @@ import java.util.List;
 @Service
 @Transactional
 public class LearningServiceImpl implements LearningService {
-    
+
     private final LearningModuleRepository moduleRepository;
     private final TopicRepository topicRepository;
     private final PracticeQuestionRepository questionRepository;
     private final CodeExampleRepository codeExampleRepository;
-    
+
     public LearningServiceImpl(LearningModuleRepository moduleRepository,
-                               TopicRepository topicRepository,
-                               PracticeQuestionRepository questionRepository,
-                               CodeExampleRepository codeExampleRepository) {
+            TopicRepository topicRepository,
+            PracticeQuestionRepository questionRepository,
+            CodeExampleRepository codeExampleRepository) {
         this.moduleRepository = moduleRepository;
         this.topicRepository = topicRepository;
         this.questionRepository = questionRepository;
         this.codeExampleRepository = codeExampleRepository;
     }
-    
+
     // Learning Module operations
-    
+
     @Override
     public LearningModule createModule(LearningModule module) {
         if (moduleRepository.existsByName(module.getName())) {
@@ -38,7 +38,7 @@ public class LearningServiceImpl implements LearningService {
         }
         return moduleRepository.save(module);
     }
-    
+
     @Override
     public LearningModule updateModule(Long id, LearningModule module) {
         LearningModule existing = getModuleById(id);
@@ -48,26 +48,26 @@ public class LearningServiceImpl implements LearningService {
         existing.setOrderIndex(module.getOrderIndex());
         return moduleRepository.save(existing);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public LearningModule getModuleById(Long id) {
         return moduleRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Module not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Module not found with id: " + id));
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public List<LearningModule> getAllModules() {
         return moduleRepository.findAllByOrderByOrderIndexAsc();
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public List<LearningModule> getModulesByType(ModuleType type) {
         return moduleRepository.findByType(type);
     }
-    
+
     @Override
     public void deleteModule(Long id) {
         if (!moduleRepository.existsById(id)) {
@@ -75,16 +75,16 @@ public class LearningServiceImpl implements LearningService {
         }
         moduleRepository.deleteById(id);
     }
-    
+
     // Topic operations
-    
+
     @Override
     public Topic createTopic(Long moduleId, Topic topic) {
         LearningModule module = getModuleById(moduleId);
         topic.setModule(module);
         return topicRepository.save(topic);
     }
-    
+
     @Override
     public Topic updateTopic(Long id, Topic topic) {
         Topic existing = getTopicById(id);
@@ -96,32 +96,32 @@ public class LearningServiceImpl implements LearningService {
         existing.setEstimatedMinutes(topic.getEstimatedMinutes());
         return topicRepository.save(existing);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public Topic getTopicById(Long id) {
         return topicRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id: " + id));
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public List<Topic> getTopicsByModule(Long moduleId) {
         return topicRepository.findByModuleIdOrderByOrderIndexAsc(moduleId);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public Page<Topic> getTopicsByModulePaginated(Long moduleId, Pageable pageable) {
         return topicRepository.findByModuleId(moduleId, pageable);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public Page<Topic> searchTopics(Long moduleId, String searchTerm, Pageable pageable) {
         return topicRepository.searchTopicsByModule(moduleId, searchTerm, pageable);
     }
-    
+
     @Override
     public void deleteTopic(Long id) {
         if (!topicRepository.existsById(id)) {
@@ -129,22 +129,22 @@ public class LearningServiceImpl implements LearningService {
         }
         topicRepository.deleteById(id);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public long getTopicCountByModule(Long moduleId) {
         return topicRepository.countByModuleId(moduleId);
     }
-    
+
     // Practice Question operations
-    
+
     @Override
     public PracticeQuestion createQuestion(Long topicId, PracticeQuestion question) {
         Topic topic = getTopicById(topicId);
         question.setTopic(topic);
         return questionRepository.save(question);
     }
-    
+
     @Override
     public PracticeQuestion updateQuestion(Long id, PracticeQuestion question) {
         PracticeQuestion existing = getQuestionById(id);
@@ -158,32 +158,39 @@ public class LearningServiceImpl implements LearningService {
         existing.setTestCases(question.getTestCases());
         return questionRepository.save(existing);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public PracticeQuestion getQuestionById(Long id) {
         return questionRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Question not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found with id: " + id));
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public List<PracticeQuestion> getQuestionsByTopic(Long topicId) {
         return questionRepository.findByTopicIdOrderByOrderIndexAsc(topicId);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public Page<PracticeQuestion> getQuestionsByTopicPaginated(Long topicId, Pageable pageable) {
         return questionRepository.findByTopicId(topicId, pageable);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public List<PracticeQuestion> getQuestionsByType(Long topicId, QuestionType type) {
         return questionRepository.findByTopicIdAndType(topicId, type);
     }
-    
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PracticeQuestion> searchQuestions(QuestionType type, DifficultyLevel difficulty, String searchTerm,
+            Pageable pageable) {
+        return questionRepository.searchQuestions(type, difficulty, searchTerm, pageable);
+    }
+
     @Override
     public void deleteQuestion(Long id) {
         if (!questionRepository.existsById(id)) {
@@ -191,16 +198,16 @@ public class LearningServiceImpl implements LearningService {
         }
         questionRepository.deleteById(id);
     }
-    
+
     // Code Example operations
-    
+
     @Override
     public CodeExample createCodeExample(Long topicId, CodeExample codeExample) {
         Topic topic = getTopicById(topicId);
         codeExample.setTopic(topic);
         return codeExampleRepository.save(codeExample);
     }
-    
+
     @Override
     public CodeExample updateCodeExample(Long id, CodeExample codeExample) {
         CodeExample existing = getCodeExampleById(id);
@@ -209,28 +216,28 @@ public class LearningServiceImpl implements LearningService {
         existing.setExplanation(codeExample.getExplanation());
         return codeExampleRepository.save(existing);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public CodeExample getCodeExampleById(Long id) {
         return codeExampleRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Code example not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Code example not found with id: " + id));
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public List<CodeExample> getCodeExamplesByTopic(Long topicId) {
         return codeExampleRepository.findByTopicId(topicId);
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public CodeExample getCodeExampleByTopicAndLanguage(Long topicId, ProgrammingLanguage language) {
         return codeExampleRepository.findByTopicIdAndLanguage(topicId, language)
-            .orElseThrow(() -> new ResourceNotFoundException(
-                "Code example not found for topic " + topicId + " and language " + language));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Code example not found for topic " + topicId + " and language " + language));
     }
-    
+
     @Override
     public void deleteCodeExample(Long id) {
         if (!codeExampleRepository.existsById(id)) {

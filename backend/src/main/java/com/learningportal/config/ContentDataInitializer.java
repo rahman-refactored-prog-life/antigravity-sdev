@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -28,11 +30,17 @@ public class ContentDataInitializer implements CommandLineRunner {
 
     private final LearningModuleRepository moduleRepository;
     private final TopicRepository topicRepository;
+    private final PracticeQuestionRepository questionRepository;
+    private final CodeExampleRepository codeExampleRepository;
 
     public ContentDataInitializer(LearningModuleRepository moduleRepository,
-            TopicRepository topicRepository) {
+            TopicRepository topicRepository,
+            PracticeQuestionRepository questionRepository,
+            CodeExampleRepository codeExampleRepository) {
         this.moduleRepository = moduleRepository;
         this.topicRepository = topicRepository;
+        this.questionRepository = questionRepository;
+        this.codeExampleRepository = codeExampleRepository;
     }
 
     @Override
@@ -177,6 +185,50 @@ public class ContentDataInitializer implements CommandLineRunner {
             return Integer.parseInt(number);
         } catch (Exception e) {
             return 999; // Put at end if can't parse
+        }
+    }
+
+    private void parseAndSaveQuestions(Topic topic, String content) {
+        // Regex to find "#### Q[Number]: [Title]"
+        Pattern pattern = Pattern.compile("#### Q\\d+: (.+?)\\n(.*?)(?=(#### Q\\d+:|$))", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(content);
+
+        while (matcher.find()) {
+            String title = matcher.group(1).trim();
+            String block = matcher.group(2).trim();
+            savePracticeQuestion(topic, title, block);
+        }
+    }
+
+    private void savePracticeQuestion(Topic topic, String title, String block) {
+        try {
+            List<PracticeQuestion> existing = questionRepository.findByTopicIdOrderByOrderIndexAsc(topic.getId());
+            if (existing.stream().anyMatch(q -> q.getTitle().equals(title))) {
+                return;
+            }
+
+            PracticeQuestion question = new PracticeQuestion();
+            question.setTopic(topic);
+            question.setTitle(title);
+            question.setType(QuestionType.INTERVIEW);
+            question.setDifficulty(extractDifficulty(block));
+            question.setOrderIndex(existing.size() + 1);
+
+            String description = block;
+            String solution = "";
+
+            if (block.contains("**Solution**:")) {
+                description = block.substring(0, block.indexOf("**Solution**:")).trim();
+                solution = block.substring(block.indexOf("**Solution**:") + 13).trim();
+            }
+
+            question.setDescription(description);
+            question.setSolution(solution);
+
+            questionRepository.save(question);
+            logger.info("Loaded interview question: {}", title);
+        } catch (Exception e) {
+            logger.error("Error saving question {}: {}", title, e.getMessage());
         }
     }
 }
