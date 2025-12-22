@@ -17,7 +17,7 @@ public class PracticeQuestion extends BaseEntity {
     @Column(nullable = false, length = 500)
     private String title;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description", length = 50000)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -28,13 +28,13 @@ public class PracticeQuestion extends BaseEntity {
     @Column(nullable = false, length = 50)
     private QuestionType type; // CORE_EXERCISE, EDGE_CASE_DRILL, CHALLENGE, MINI_PROJECT, QUIZ
 
-    @Column(name = "solution", columnDefinition = "TEXT")
+    @Column(name = "solution", length = 50000)
     private String solution;
 
-    @Column(name = "hints", columnDefinition = "TEXT")
+    @Column(name = "hints", length = 50000)
     private String hints; // JSON array of hints
 
-    @Column(name = "test_cases", columnDefinition = "TEXT")
+    @Column(name = "test_cases", length = 50000)
     private String testCases; // JSON array of test cases
 
     @Column(name = "order_index", nullable = false)

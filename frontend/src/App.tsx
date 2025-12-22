@@ -9,6 +9,7 @@ import { ModulePage } from './pages/ModulePage'
 import { TopicDetailPage } from './pages/TopicDetailPage'
 import { CheatsheetPage } from './pages/CheatsheetPage'
 import { InterviewQuestionsPage } from './pages/InterviewQuestionsPage'
+import InterviewBankPage from './pages/InterviewBankPage'
 import { NotesPage } from './pages/NotesPage'
 import ComponentShowcase from './pages/ComponentShowcase'
 import './App.css'
@@ -76,6 +77,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <InterviewQuestionsPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/interview-bank"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <InterviewBankPage />
                 </Layout>
               </ProtectedRoute>
             }

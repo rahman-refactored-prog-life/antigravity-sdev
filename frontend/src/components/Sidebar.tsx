@@ -193,6 +193,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, onToggle 
       <nav className="sidebar-nav">
         {loading && !isCollapsed && <div className="sidebar-loading">Loading path...</div>}
 
+        {!isCollapsed && (
+          <div className="sidebar-section">
+            <div className="section-header">
+              <button
+                className="section-button"
+                onClick={() => navigate('/interview-bank')}
+              >
+                <span className="section-icon"><Database size={18} /></span>
+                <span className="section-title">Interview Bank</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         {!loading && sections.map((section) => (
           <div key={section.id} className="sidebar-section">
             <div className={`section-header ${expandedSections.includes(section.id) ? 'expanded' : ''}`}>

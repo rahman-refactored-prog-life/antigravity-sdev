@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,7 +43,6 @@ public class ContentDataInitializer implements CommandLineRunner {
     }
 
     @Override
-    @Transactional
     public void run(String... args) {
         // Always check content to allow incremental updates
         // if (topicRepository.count() > 0) { ... }
@@ -125,6 +123,9 @@ public class ContentDataInitializer implements CommandLineRunner {
 
             topicRepository.save(topic);
             logger.info("Loaded topic: {} ({} lines)", title, content.lines().count());
+
+            // Parse and save interview questions
+            parseAndSaveQuestions(topic, content);
 
         } catch (Exception e) {
             logger.error("Error loading topic from {}: {}", filePath, e.getMessage());
